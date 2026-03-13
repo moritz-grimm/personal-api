@@ -1,14 +1,14 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import info from "./routes/info.js";
+import github from "./routes/github.js";
+import api from "./routes/api.js";
 
 const app = new Hono();
 
-app.get("/", (c) => {
-    return c.text("Hello there!");
-});
-
+app.route("/", api);
 app.route("/info", info);
+app.route("/github", github);
 
 serve({
     fetch: app.fetch,
