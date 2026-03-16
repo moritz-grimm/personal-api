@@ -103,6 +103,8 @@ fourhundredeighteen.on("PROPFIND", "/:pot", (c) => {
             brewerVersion: "HTCPCP/1.0",
         }, 200);
     }
+
+    return c.text("Pot not found", 404);
 });
 
 export default fourhundredeighteen;
