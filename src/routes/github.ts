@@ -1,12 +1,15 @@
 import { Hono } from "hono";
 import type { Endpoints } from "@octokit/types";
-import { loadEnvFile } from "node:process";
+import { existsSync } from "node:fs";
 import path from "node:path";
 
 type RepoListResponse = Endpoints["GET /users/{username}/repos"]["response"]["data"];
 type UserReponse = Endpoints["GET /user"]["response"]["data"];
 type Format = "json" | "text";
-loadEnvFile(path.join(process.cwd(), ".env"));
+const envPath = path.join(process.cwd(), ".env");
+if (existsSync(envPath)) {
+    process.loadEnvFile(envPath);
+}
 
 const github = new Hono();
 
