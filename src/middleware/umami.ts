@@ -1,4 +1,11 @@
 import type { MiddlewareHandler } from "hono";
+import { existsSync } from "node:fs";
+import { join } from "node:path";
+
+const envPath = join(process.cwd(), ".env");
+if (existsSync(envPath)) {
+    process.loadEnvFile(envPath);
+}
 
 const UMAMI_URL = process.env.UMAMI_URL;
 const UMAMI_WEBSITE_ID = process.env.UMAMI_WEBSITE_ID;
@@ -9,13 +16,11 @@ export const umami: MiddlewareHandler = async(c, next) => {
     if (!UMAMI_URL || !UMAMI_WEBSITE_ID) return;
 
     const url = new URL(c.req.url);
-    const userAgent = c.req.header("User-Agent") || "Unknown";
-
     fetch(`${UMAMI_URL}/api/send`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "User-Agent": userAgent,
+            "User-Agent": "Mozilla/5.0 (compatible; PersonalAPI/1.0)",
         },
         body: JSON.stringify({
             type: "event",
@@ -29,6 +34,7 @@ export const umami: MiddlewareHandler = async(c, next) => {
                 data: {
                     method: c.req.method,
                     status: c.res.status,
+                    userAgent: c.req.header("User-Agent") || "Unknown",
                 },
             },
         }),
