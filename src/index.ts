@@ -1,11 +1,14 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
+import { umami } from "./middleware/umami.js";
 import info from "./routes/info.js";
 import github from "./routes/github.js";
 import api from "./routes/api.js";
 import fourhundredeighteen from "./routes/418/index.js";
 
 const app = new Hono();
+
+app.use("*", umami);
 
 app.route("/", api);
 app.route("/info", info);
