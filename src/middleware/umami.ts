@@ -15,28 +15,31 @@ export const umami: MiddlewareHandler = async(c, next) => {
 
     if (!UMAMI_URL || !UMAMI_WEBSITE_ID) return;
 
-    const url = new URL(c.req.url);
-    fetch(`${UMAMI_URL}/api/send`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
-        },
-        body: JSON.stringify({
-            type: "event",
-            payload: {
-                hostname: url.hostname,
-                url: url.pathname,
-                website: UMAMI_WEBSITE_ID,
-                language: c.req.header("Accept-Language")?.split(",")[0] || "",
-                referrer: c.req.header("Referer") || "",
-                name: `${c.req.method} ${url.pathname}`,
-                data: {
-                    method: c.req.method,
-                    status: c.res.status,
-                    userAgent: c.req.header("User-Agent") || "Unknown",
-                },
+    const userAgent = c.req.header("User-Agent");
+    if (!userAgent?.includes("Uptime-Kuma")) {
+        const url = new URL(c.req.url);
+        fetch(`${UMAMI_URL}/api/send`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
             },
-        }),
-    }).catch(() => {});
+            body: JSON.stringify({
+                type: "event",
+                payload: {
+                    hostname: url.hostname,
+                    url: url.pathname,
+                    website: UMAMI_WEBSITE_ID,
+                    language: c.req.header("Accept-Language")?.split(",")[0] || "",
+                    referrer: c.req.header("Referer") || "",
+                    name: `${c.req.method} ${url.pathname}`,
+                    data: {
+                        method: c.req.method,
+                        status: c.res.status,
+                        userAgent: userAgent || "Unknown",
+                    },
+                },
+            }),
+        }).catch(() => {});
+    }
 };
