@@ -4,9 +4,11 @@ const api = new Hono();
 
 api.get("/", (c) => {
     return c.json({
-        self: { href: "/api", description: "This endpoint itself" },
-        info: { href: "/info", description: "Infos about me" },
-        github: { href: "/github", description: "Infos about my Github" },
+        self: { href: "/api", description: "Lists all available endpoints" },
+        info: { href: "/info", description: "General information about me" },
+        github: { href: "/github", description: "My GitHub profile and activity" },
+        status: { href: "/status", description: "Status of my services" },
+        impressum: { href: "/impressum", description: "Legal notice (Impressum)" },
     });
 });
 
