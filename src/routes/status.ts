@@ -32,7 +32,7 @@ type HeartbeatResponse = {
 export const status = new Hono();
 
 let cache: { data: unknown; time: number } | null = null;
-const TTL = 60_000;
+const TTL = 60_000; // 60s
 
 status.get("/", async(c) => {
     if (cache && Date.now() - cache.time < TTL ) {
