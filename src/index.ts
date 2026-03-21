@@ -1,5 +1,6 @@
 import { serve } from "@hono/node-server";
 import { Hono } from "hono";
+import { corsMiddleware } from "./middleware/cors.js";
 import { umami } from "./middleware/umami.js";
 import info from "./routes/info.js";
 import github from "./routes/github.js";
@@ -10,6 +11,7 @@ import { status } from "./routes/status.js";
 
 const app = new Hono();
 
+app.use("*", corsMiddleware);
 app.use("*", umami);
 
 app.route("/", api);
