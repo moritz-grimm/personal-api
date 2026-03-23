@@ -9,6 +9,7 @@ api.get("/", (c) => {
         github: { href: "/github", description: "My GitHub profile and activity" },
         status: { href: "/status", description: "Status of my services" },
         impressum: { href: "/impressum", description: "Legal notice (Impressum)" },
+        privacyPolicy: { href: "/privacy-policy", description: "Privacy Policy" },
     });
 });
 
