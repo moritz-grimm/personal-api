@@ -13,7 +13,7 @@ lastUpdated.get("/:repo?", async(c) => {
     const cached = cache.get(repo);
 
     if (cached && Date.now() - cached.time < CACHE_TTL) {
-        return c.json(cached.lastUpdated);
+        return c.json({ lastUpdated: cached.lastUpdated });
     }
 
     const response = await fetch(`https://api.github.com/repos/moritz-grimm/${repo}/commits`);
