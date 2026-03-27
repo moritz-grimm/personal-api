@@ -3,6 +3,8 @@ import type { Endpoints } from "@octokit/types";
 import { existsSync } from "node:fs";
 import path from "node:path";
 
+// TODO: Implement cache here
+
 type RepoListResponse = Endpoints["GET /users/{username}/repos"]["response"]["data"];
 type UserReponse = Endpoints["GET /user"]["response"]["data"];
 type Format = "json" | "text";

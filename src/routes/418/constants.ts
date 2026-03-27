@@ -34,3 +34,9 @@ export type PotInfo = {
     status: PotState;
     brewerVersion: string;
 };
+
+export const POT_INFO: Record<AvailablePots, { name: string, age: string, capacity: string }> = {
+    "pot-1": { name: "Brühhilde", age: "4", capacity: "1.5L" },
+    "pot-2": { name: "Sir Brews-a-Lot", age: "12", capacity: "0.8L" },
+    "pot-3": { name: "Brewbacca", age: "6", capacity: "4.2L" },
+};

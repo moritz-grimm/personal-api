@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { ALLOWED_ADDITIONS, AVAILABLE_POTS, potStates, type AllowedAdditions, type AvailablePots, type PotInfo } from "./constants.js";
+import { ALLOWED_ADDITIONS, AVAILABLE_POTS, POT_INFO, potStates, type AllowedAdditions, type AvailablePots, type PotInfo } from "./constants.js";
 
 const fourhundredeighteen = new Hono();
 
@@ -66,45 +66,19 @@ fourhundredeighteen.post("/:pot", (c) => {
         }
     }
 
-
     return c.text("Started brewing coffee", 200);
 });
 
 fourhundredeighteen.on("PROPFIND", "/:pot", (c) => {
     const pot = c.req.param("pot") as AvailablePots;
+    const info = POT_INFO[pot];
 
-    if (pot === "pot-1") {
-        return c.json<PotInfo>({
-            name: "Brühhilde",
-            age: "4",
-            capacity: "1.5L",
-            availableAdditions: ALLOWED_ADDITIONS,
-            status: potStates.get(pot)!,
-            brewerVersion: "HTCPCP/1.0",
-        }, 200);
-    }
-    if (pot === "pot-2") {
-        return c.json<PotInfo>({
-            name: "Sir Brews-a-Lot",
-            age: "12",
-            capacity: "0.8L",
-            availableAdditions: ALLOWED_ADDITIONS,
-            status: potStates.get(pot)!,
-            brewerVersion: "HTCPCP/1.0",
-        }, 200);
-    }
-    if (pot === "pot-3") {
-        return c.json<PotInfo>({
-            name: "Brewbacca",
-            age: "6",
-            capacity: "4.2L",
-            availableAdditions: ALLOWED_ADDITIONS,
-            status: potStates.get(pot)!,
-            brewerVersion: "HTCPCP/1.0",
-        }, 200);
-    }
-
-    return c.text("Pot not found", 404);
+    return c.json<PotInfo>({
+        ...info,
+        availableAdditions: ALLOWED_ADDITIONS,
+        status: potStates.get(pot)!,
+        brewerVersion: "HTCPCP/1.0",
+    }, 200);
 });
 
 export default fourhundredeighteen;

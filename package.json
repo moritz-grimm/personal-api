@@ -4,7 +4,10 @@
     "scripts": {
         "dev": "tsx watch src/index.ts",
         "build": "tsc",
-        "start": "node dist/index.js"
+        "start": "node dist/index.js",
+        "test": "vitest run",
+        "test:coverage": "vitest run --coverage",
+        "test:watch": "vitest"
     },
     "dependencies": {
         "@hono/node-server": "^1.19.11",
@@ -14,7 +17,9 @@
         "@moritz-grimm/eslint-config": "^2.0.0",
         "@octokit/types": "^16.0.0",
         "@types/node": "^20.11.17",
+        "@vitest/coverage-v8": "4.1.1",
         "tsx": "^4.7.1",
-        "typescript": "^5.8.3"
+        "typescript": "^5.8.3",
+        "vitest": "^4.1.1"
     }
 }
