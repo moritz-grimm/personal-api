@@ -8,6 +8,7 @@ import fourhundredeighteen from "./routes/418/index.js";
 import { impressum } from "./routes/impressum.js";
 import { status } from "./routes/status.js";
 import { privacyPolicy } from "./routes/privacy-policy.js";
+import { lastUpdated } from "./routes/last-updated.js";
 
 const app = new Hono();
 
@@ -20,6 +21,7 @@ app.route("/impressum", impressum);
 app.route("/privacy-policy", privacyPolicy);
 app.route("/github", github);
 app.route("/status", status);
+app.route("/last-updated", lastUpdated);
 app.route("/418", fourhundredeighteen);
 app.route("/fourhundredeighteen", fourhundredeighteen);
 
