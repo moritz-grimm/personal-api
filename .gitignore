@@ -31,3 +31,6 @@ todo.md
 
 # vitest
 /coverage
+
+# build
+/dist
