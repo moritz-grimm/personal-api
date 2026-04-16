@@ -1,7 +1,5 @@
 import { Hono } from "hono";
-import { algorithMap, type Algorithms, type SortRequestBody } from "./constants.js";
-import { elonSort } from "./elon-sort.js";
-import { bubbleSort } from "./bubble-sort.js";
+import { algorithMap, MAX_ARRAY_SIZE, type Algorithms, type SortRequestBody } from "./constants.js";
 
 const algorithms = new Hono();
 
@@ -14,14 +12,8 @@ algorithms.get("/", (c) => {
 
 algorithms.post("/:algorithm?", async(c) => {
     const algorithm = c.req.param("algorithm") as Algorithms;
-    let body: SortRequestBody;
-    try {
-        body = await c.req.json();
-    } catch {
-        return c.json({
-            error: "Malfored body syntax",
-        }, 400);
-    }
+    const body = await c.req.json<SortRequestBody>().catch(() => null);
+    if (!body) return c.json({ error: "Invalid or missing body" }, 400);
 
     if (!algorithm) {
         return c.json({
@@ -29,11 +21,13 @@ algorithms.post("/:algorithm?", async(c) => {
         }, 422);
     }
 
-    if (!body.arr) {
+    if (!Array.isArray(body.arr)) {
         return c.json({
             error: "Body needs to contain a array",
         }, 400);
     }
+
+    if (body.arr.length > MAX_ARRAY_SIZE) return c.json({ error: "Max array size exceeded" }, 400);
 
     if (!onlyNumbers(body.arr)) {
         return c.json({
