@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { algorithMap, MAX_ARRAY_SIZE, type Algorithms, type SortRequestBody } from "./constants.js";
+import { Errors } from "../../errors.js";
 
 const algorithms = new Hono();
 
@@ -15,7 +16,7 @@ algorithms.get("/", (c) => {
 algorithms.post("/:algorithm?", async(c) => {
     const algorithm = c.req.param("algorithm") as Algorithms;
     const body = await c.req.json<SortRequestBody>().catch(() => null);
-    if (!body) return c.json({ error: "Invalid or missing body" }, 400);
+    if (!body) throw Errors.INVALID_BODY();
 
     if (!algorithm) {
         return c.json({

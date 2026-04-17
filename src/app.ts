@@ -10,6 +10,7 @@ import { status } from "./routes/status.js";
 import { privacyPolicy } from "./routes/privacy-policy.js";
 import { lastUpdated } from "./routes/last-updated.js";
 import algorithms from "./routes/algorithms/algorithms.js";
+import { HTTPException } from "hono/http-exception";
 
 const app = new Hono();
 
@@ -26,5 +27,12 @@ app.route("/last-updated", lastUpdated);
 app.route("/418", fourhundredeighteen);
 app.route("/fourhundredeighteen", fourhundredeighteen);
 app.route("/algorithms", algorithms);
+
+app.onError((err, c) => {
+    if (err instanceof HTTPException) {
+        return c.json({ error: err.message }, err.status);
+    }
+    return c.json({ error: "Internal server error" }, 500);
+});
 
 export default app;
