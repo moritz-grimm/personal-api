@@ -4,10 +4,12 @@ import { algorithMap, MAX_ARRAY_SIZE, type Algorithms, type SortRequestBody } fr
 const algorithms = new Hono();
 
 algorithms.get("/", (c) => {
-    return c.json({
-        elonSort: { href: "/elon-sort", description: "Elon-Sort is a next-gen algorithm designed to eventually sort arrays" },
-        bubbleSort: { href: "/bubble-sort", description: "Sorts an array of numbers using the bubble sort algorithm" },
-    });
+    return c.json(Object.fromEntries(
+        Object.entries(algorithMap).map(([key, { description }]) => [
+            key,
+            { href: `/${key}`, description },
+        ]),
+    ));
 });
 
 algorithms.post("/:algorithm?", async(c) => {
@@ -35,7 +37,7 @@ algorithms.post("/:algorithm?", async(c) => {
         }, 422);
     }
 
-    const fn = algorithMap[algorithm];
+    const fn = algorithMap[algorithm].fn;
 
     if (!fn) {
         return c.json({

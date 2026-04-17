@@ -6,9 +6,10 @@ export const MAX_ARRAY_SIZE = 2_000;
 export type SortRequestBody = {
     arr: Array<number>
 };
-export const algorithMap: Record<string, (arr: number[]) => number[] | Promise<number[]>> = {
-    "elon-sort": elonSort,
-    "bubble-sort": bubbleSort,
-    "selection-sort": selectionSort,
+
+export const algorithMap: Record<string, { fn: (arr: number[]) => number[] | Promise<number[]>, description: string }> = {
+    "elon-sort": { fn: elonSort, description: "Elon-Sort is a next-gen algorithm designed to eventually sort arrays" },
+    "bubble-sort": { fn: bubbleSort, description: "Sorts an array of numbers using the bubble sort algorithm" },
+    "selection-sort": { fn: selectionSort, description: "Sorts an array of numbers using the selection sort algorithm" },
 };
 export type Algorithms = keyof typeof algorithMap;
