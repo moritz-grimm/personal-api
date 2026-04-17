@@ -13,16 +13,10 @@ algorithms.get("/", (c) => {
     ));
 });
 
-algorithms.post("/:algorithm?", async(c) => {
-    const algorithm = c.req.param("algorithm") as Algorithms;
+algorithms.post("/:algorithm", async(c) => {
+    const algorithm: Algorithms = c.req.param("algorithm");
     const body = await c.req.json<SortRequestBody>().catch(() => null);
     if (!body) throw Errors.INVALID_BODY();
-
-    if (!algorithm) {
-        return c.json({
-            error: "No algorithm provided",
-        }, 422);
-    }
 
     if (!Array.isArray(body.arr)) {
         return c.json({
@@ -38,7 +32,7 @@ algorithms.post("/:algorithm?", async(c) => {
         }, 422);
     }
 
-    const fn = algorithMap[algorithm].fn;
+    const fn = algorithMap[algorithm]?.fn;
 
     if (!fn) {
         return c.json({

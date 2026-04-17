@@ -1,4 +1,6 @@
 export function selectionSort(arr: Array<number>): Array<number> {
+    if (arr.length === 0) return arr;
+
     const max = Math.max(...arr);
     let threshold = -Infinity;
     let currentSmallestNumIndex = 0;
