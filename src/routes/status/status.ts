@@ -1,9 +1,9 @@
 import { Hono } from "hono";
-import { monitorSlugMap, TTL, type HeartbeatResponse, type StatusPageResponse, type StatusResponse } from "./constants.js";
+import { monitorSlugMap, TTL, type HeartbeatResponse, type StatusEntry, type StatusPageResponse } from "./constants.js";
 
 export const status = new Hono();
 
-let cache: { data: unknown; time: number } | null = null;
+let cache: { data: StatusEntry[]; time: number } | null = null;
 
 status.get("/", async(c) => {
     if (cache && Date.now() - cache.time < TTL ) {
@@ -31,29 +31,29 @@ status.get("/:monitor", async(c) => {
 
 export default status;
 
-async function fetchMonitors(): Promise<StatusResponse> {
-    const [ pageRes, heartbeatRes ] = await Promise.all([
+async function fetchMonitors(): Promise<StatusEntry[]> {
+    const [ statusPageRes, heartbeatRes ] = await Promise.all([
         fetch("https://status.moritz-grimm.dev/api/status-page/default"),
         fetch("https://status.moritz-grimm.dev/api/status-page/heartbeat/default"),
     ]);
 
-    const page = await pageRes.json() as StatusPageResponse;
+    const statusPage = await statusPageRes.json() as StatusPageResponse;
     const heartbeats = await heartbeatRes.json() as HeartbeatResponse;
 
-    return page.publicGroupList
-        .flatMap(service => service.monitorList)
-        .map(entry => {
-            const beats = heartbeats.heartbeatList[entry.id] ?? [];
-            const latest = beats.at(-1);
-            const slug = monitorSlugMap[entry.name];
+    return statusPage.publicGroupList
+        .flatMap(group => group.monitorList)
+        .map(monitor => {
+            const monitorHeartbeats = heartbeats.heartbeatList[monitor.id] ?? [];
+            const latest = monitorHeartbeats.at(-1);
+            const slug = monitorSlugMap[monitor.name];
 
             return {
-                name: entry.name,
+                name: monitor.name,
                 slug: slug,
                 href: `/status/${slug}`,
                 status: latest?.status,
                 ping: latest?.ping,
-                uptime24h: heartbeats.uptimeList[`${entry.id}_24`] ?? null,
+                uptime24h: heartbeats.uptimeList[`${monitor.id}_24`] ?? null,
             };
         });
 }

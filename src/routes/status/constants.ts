@@ -1,7 +1,6 @@
 export type Monitor = {
     id: number;
     name: string;
-    sendUrl: number;
     type: string;
 };
 
@@ -27,14 +26,14 @@ export type HeartbeatResponse = {
     uptimeList: Record<string, number>;
 };
 
-export type StatusResponse = {
-    name: string,
-    slug: string | undefined,
-    href: string | undefined,
-    status: number | undefined,
-    ping: number | undefined,
-    uptime24h: number,
-}[];
+export type StatusEntry = {
+    name: string;
+    slug: string | undefined;
+    href: string | undefined;
+    status: number | undefined;
+    ping: number | undefined;
+    uptime24h: number;
+};
 
 export const monitorSlugMap: Record<string, string> = {
     "www.moritz-grimm.dev": "homepage",
