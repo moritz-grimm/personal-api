@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import app from "../../src/app.js";
-import { algorithMap, MAX_ARRAY_SIZE } from "../../src/routes/algorithms/constants.js";
+import { algorithmMap, MAX_ARRAY_SIZE } from "../../src/routes/algorithms/constants.js";
 
 type SortResult = {
     time: number,
@@ -10,7 +10,7 @@ type SortResult = {
 describe("GET /algorithms", () => {
     test("returns list of every available algorithm", async() => {
         const expectedRes = Object.fromEntries(
-            Object.entries(algorithMap).map(([key, { description }]) => [
+            Object.entries(algorithmMap).map(([key, { description }]) => [
                 key,
                 { href: `/${key}`, description },
             ]),

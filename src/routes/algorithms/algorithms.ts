@@ -1,12 +1,12 @@
 import { Hono } from "hono";
-import { algorithMap, MAX_ARRAY_SIZE, type Algorithms, type SortRequestBody } from "./constants.js";
+import { algorithmMap, MAX_ARRAY_SIZE, type Algorithms, type SortRequestBody } from "./constants.js";
 import { Errors } from "../../errors.js";
 
 const algorithms = new Hono();
 
 algorithms.get("/", (c) => {
     return c.json(Object.fromEntries(
-        Object.entries(algorithMap).map(([key, { description }]) => [
+        Object.entries(algorithmMap).map(([key, { description }]) => [
             key,
             { href: `/${key}`, description },
         ]),
@@ -32,7 +32,7 @@ algorithms.post("/:algorithm", async(c) => {
         }, 422);
     }
 
-    const fn = algorithMap[algorithm]?.fn;
+    const fn = algorithmMap[algorithm]?.fn;
 
     if (!fn) {
         return c.json({

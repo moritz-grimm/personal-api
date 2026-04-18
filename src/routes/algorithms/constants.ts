@@ -7,9 +7,9 @@ export type SortRequestBody = {
     arr: Array<number>
 };
 
-export const algorithMap: Record<string, { fn: (arr: number[]) => number[] | Promise<number[]>, description: string }> = {
+export const algorithmMap: Record<string, { fn: (arr: number[]) => number[] | Promise<number[]>, description: string }> = {
     "elon-sort": { fn: elonSort, description: "Elon-Sort is a next-gen algorithm designed to eventually sort arrays" },
     "bubble-sort": { fn: bubbleSort, description: "Sorts an array of numbers using the bubble sort algorithm" },
     "selection-sort": { fn: selectionSort, description: "Sorts an array of numbers using the selection sort algorithm" },
 };
-export type Algorithms = keyof typeof algorithMap;
+export type Algorithms = keyof typeof algorithmMap;
