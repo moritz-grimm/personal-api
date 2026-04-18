@@ -1,16 +1,28 @@
 import { Hono } from "hono";
+import app from "../app.js";
+
+type Route = {
+    basePath: string,
+    path: string,
+    method: string,
+};
 
 const api = new Hono();
 
 api.get("/", (c) => {
-    return c.json({
-        self: { href: "/api", description: "Lists all available endpoints" },
-        info: { href: "/info", description: "General information about me" },
-        github: { href: "/github", description: "My GitHub profile and activity" },
-        status: { href: "/status", description: "Status of my services" },
-        impressum: { href: "/impressum", description: "Legal notice (Impressum)" },
-        privacyPolicy: { href: "/privacy-policy", description: "Privacy Policy" },
+    const appRoutes: Route[] = app.routes;
+    const routes = new Set<string>();
+
+    appRoutes.forEach(route => {
+        routes.add(route.basePath);
     });
+
+    const exclude = new Set(["/", "/fourhundredeighteen"]);
+    const paths = [...routes].filter(path => !exclude.has(path));
+
+    return c.json(
+        Object.fromEntries(paths.map(path => [path.slice(1), { href: path }])),
+    );
 });
 
 export default api;
