@@ -1,53 +1,9 @@
 import { Hono } from "hono";
-
-type Monitor = {
-    id: number;
-    name: string;
-    sendUrl: number;
-    type: string;
-};
-
-type Incident = Record<string, unknown>;
-
-type Maintenance = Record<string, unknown>;
-
-type StatusPageResponse = {
-    incidents: Incident[];
-    publicGroupList: { monitorList: Monitor[] }[];
-    maintenanceList: Maintenance[];
-};
-
-type HeartbeatEntry = {
-    status: number;
-    time: string;
-    msg: string;
-    ping: number;
-};
-
-type HeartbeatResponse = {
-    heartbeatList: Record<string, HeartbeatEntry[]>;
-    uptimeList: Record<string, number>;
-};
-
-type StatusResponse = {
-    name: string,
-    slug: string | undefined,
-    href: string | undefined,
-    status: number | undefined,
-    ping: number | undefined,
-    uptime24h: number,
-}[];
-
-const monitorSlugMap: Record<string, string> = {
-    "www.moritz-grimm.dev": "homepage",
-    "api.moritz-grimm.dev": "api",
-    "knowledge.moritz-grimm.dev": "knowledge",
-};
+import { monitorSlugMap, TTL, type HeartbeatResponse, type StatusPageResponse, type StatusResponse } from "./constants.js";
 
 export const status = new Hono();
 
 let cache: { data: unknown; time: number } | null = null;
-const TTL = 60_000; // 60s
 
 status.get("/", async(c) => {
     if (cache && Date.now() - cache.time < TTL ) {
@@ -72,6 +28,8 @@ status.get("/:monitor", async(c) => {
 
     return c.json(found);
 });
+
+export default status;
 
 async function fetchMonitors(): Promise<StatusResponse> {
     const [ pageRes, heartbeatRes ] = await Promise.all([

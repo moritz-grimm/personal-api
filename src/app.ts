@@ -6,7 +6,7 @@ import github from "./routes/github.js";
 import api from "./routes/api.js";
 import fourhundredeighteen from "./routes/418/index.js";
 import { impressum } from "./routes/impressum.js";
-import { status } from "./routes/status.js";
+import { status } from "./routes/status/status.js";
 import { privacyPolicy } from "./routes/privacy-policy.js";
 import { lastUpdated } from "./routes/last-updated.js";
 import algorithms from "./routes/algorithms/algorithms.js";
