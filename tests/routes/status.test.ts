@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { describe, expect, test } from "vitest";
-import app from "../src/app.js";
+import app from "../../src/app.js";
 
 describe("GET /status", () => {
     test("returns 200", async() => {

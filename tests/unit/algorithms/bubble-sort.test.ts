@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { bubbleSort } from "../../src/routes/algorithms/bubble-sort.js";
+import { bubbleSort } from "../../../src/routes/algorithms/bubble-sort.js";
 
 describe("GET /algorithms/bubble-sort", () => {
     test("sorts an unsorted array", () => {

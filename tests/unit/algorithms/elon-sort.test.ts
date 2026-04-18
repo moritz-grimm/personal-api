@@ -1,6 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { elonSort } from "../../src/routes/algorithms/elon-sort.js";
-
+import { elonSort } from "../../../src/routes/algorithms/elon-sort.js";
 describe("GET /algorithms/elon-sort", () => {
     test("returns array with same length", async() => {
         expect(await elonSort([1, 2, 3])).toHaveLength(3);
