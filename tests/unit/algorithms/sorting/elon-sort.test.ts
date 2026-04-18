@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { elonSort } from "../../../src/routes/algorithms/elon-sort.js";
+import { elonSort } from "../../../../src/routes/algorithms/sorting/elon-sort.js";
 
 describe.skipIf(process.env.RUN_SLOW !== "1")("elon-sort", () => {
     test("returns array with same length", async() => {
@@ -11,7 +11,7 @@ describe.skipIf(process.env.RUN_SLOW !== "1")("elon-sort", () => {
         expect(res.toSorted((a, b) => a - b)).toEqual([1, 2, 3]);
     }, 15_000);
 
-    test("handles empty array", async() => {
+    test("returns empty array on empty input", async() => {
         expect(await elonSort([])).toEqual([]);
     }, 15_000);
 });
