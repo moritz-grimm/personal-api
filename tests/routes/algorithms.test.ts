@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import app from "../../src/app.js";
-import { algorithmMap, MAX_ARRAY_SIZE } from "../../src/routes/algorithms/constants.js";
+import { sortingAlgorithmMap, MAX_ARRAY_SIZE, searchAlgorithmMap } from "../../src/routes/algorithms/constants.js";
 
 type SortResult = {
     time: number,
@@ -9,21 +9,30 @@ type SortResult = {
 
 describe("GET /algorithms", () => {
     test("returns list of every available algorithm", async() => {
-        const expectedRes = Object.fromEntries(
-            Object.entries(algorithmMap).map(([key, { description }]) => [
-                key,
-                { href: `/${key}`, description },
-            ]),
-        );
+        const expectedRes = {
+            sorting: Object.fromEntries(
+                Object.entries(sortingAlgorithmMap).map(([key, { description }]) => [
+                    key,
+                    { href: `/sorting/${key}`, description },
+                ]),
+            ),
+            search: Object.fromEntries(
+                Object.entries(searchAlgorithmMap).map(([key, { description }]) => [
+                    key,
+                    { href: `/search/${key}`, description },
+                ]),
+            ),
+        };
+
         const res = await app.request("/algorithms");
 
         expect(await res.json()).toEqual(expectedRes);
     });
 });
 
-describe("POST /algorithms/:algorithm", () => {
+describe("POST /algorithms/sorting/:algorithm", () => {
     test("returns 400 on invalid or missing body", async() => {
-        const res = await app.request("/algorithms/bubble-sort", {
+        const res = await app.request("/algorithms/sorting/bubble-sort", {
             method: "POST",
         });
 
@@ -31,7 +40,7 @@ describe("POST /algorithms/:algorithm", () => {
     });
 
     test("returns 400 if body is missing an array", async() => {
-        const res = await app.request("/algorithms/bubble-sort", {
+        const res = await app.request("/algorithms/sorting/bubble-sort", {
             method: "POST",
             body: JSON.stringify({
                 text: "Hello this is a message",
@@ -42,7 +51,7 @@ describe("POST /algorithms/:algorithm", () => {
     });
 
     test("returns 400 if body contains an invalid array", async() => {
-        const res = await app.request("/algorithms/bubble-sort", {
+        const res = await app.request("/algorithms/sorting/bubble-sort", {
             method: "POST",
             body: JSON.stringify({
                 arr: "[2, 4, 2, 3]",
@@ -53,7 +62,7 @@ describe("POST /algorithms/:algorithm", () => {
     });
 
     test("returns 400 if max array size is exceeded", async() => {
-        const res = await app.request("/algorithms/bubble-sort", {
+        const res = await app.request("/algorithms/sorting/bubble-sort", {
             method: "POST",
             body: JSON.stringify({
                 arr: Array.from({ length: MAX_ARRAY_SIZE + 1 }, (_, i) => i),
@@ -64,7 +73,7 @@ describe("POST /algorithms/:algorithm", () => {
     });
 
     test("returns 422 if array contains anything other than numbers", async() => {
-        const res = await app.request("/algorithms/bubble-sort", {
+        const res = await app.request("/algorithms/sorting/bubble-sort", {
             method: "POST",
             body: JSON.stringify({
                 arr: [5, 1, 3, "Hello World", 22, 3],
@@ -75,7 +84,7 @@ describe("POST /algorithms/:algorithm", () => {
     });
 
     test("returns 404 on unknown algorithm", async() => {
-        const res = await app.request("/algorithms/unknown-algorithm", {
+        const res = await app.request("/algorithms/sorting/unknown-algorithm", {
             method: "POST",
             body: JSON.stringify({
                 arr: [5, 1, 3, 22, 3],
@@ -86,7 +95,7 @@ describe("POST /algorithms/:algorithm", () => {
     });
 
     test("returns 200 and sorted result on valid input", async() => {
-        const res = await app.request("/algorithms/bubble-sort", {
+        const res = await app.request("/algorithms/sorting/bubble-sort", {
             method: "POST",
             body: JSON.stringify({
                 arr: [-2, 3, 11, 2, 3, 5, 1, 3, 22, 3],

@@ -1,38 +1,37 @@
 import { Hono } from "hono";
-import { algorithmMap, MAX_ARRAY_SIZE, type Algorithms, type SortRequestBody } from "./constants.js";
 import { Errors } from "../../errors.js";
+import type { SearchAlgorithms, SearchRequestBody, SortingAlgorithms, SortRequestBody } from "./constants.js";
+import { searchAlgorithmMap, sortingAlgorithmMap } from "./constants.js";
+import { arrayIsSorted, validateArray } from "./algorithm-utils.js";
 
 const algorithms = new Hono();
 
 algorithms.get("/", (c) => {
-    return c.json(Object.fromEntries(
-        Object.entries(algorithmMap).map(([key, { description }]) => [
-            key,
-            { href: `/${key}`, description },
-        ]),
-    ));
+    return c.json({
+        sorting: Object.fromEntries(
+            Object.entries(sortingAlgorithmMap).map(([key, { description }]) => [
+                key,
+                { href: `/sorting/${key}`, description },
+            ]),
+        ),
+        search: Object.fromEntries(
+            Object.entries(searchAlgorithmMap).map(([key, { description }]) => [
+                key,
+                { href: `/search/${key}`, description },
+            ]),
+        ),
+    });
 });
 
-algorithms.post("/:algorithm", async(c) => {
-    const algorithm: Algorithms = c.req.param("algorithm");
+algorithms.post("/sorting/:algorithm", async(c) => {
+    const algorithm: SortingAlgorithms = c.req.param("algorithm");
     const body = await c.req.json<SortRequestBody>().catch(() => null);
     if (!body) throw Errors.INVALID_BODY();
 
-    if (!Array.isArray(body.arr)) {
-        return c.json({
-            error: "Body needs to contain a array",
-        }, 400);
-    }
+    const error = validateArray(c, body.arr);
+    if (error) return error;
 
-    if (body.arr.length > MAX_ARRAY_SIZE) return c.json({ error: "Max array size exceeded" }, 400);
-
-    if (!onlyNumbers(body.arr)) {
-        return c.json({
-            error: "Array should only contain numbers",
-        }, 422);
-    }
-
-    const fn = algorithmMap[algorithm]?.fn;
+    const fn = sortingAlgorithmMap[algorithm]?.fn;
 
     if (!fn) {
         return c.json({
@@ -50,10 +49,42 @@ algorithms.post("/:algorithm", async(c) => {
     }, 200);
 });
 
-export default algorithms;
+algorithms.post("/search/:algorithm", async(c) => {
+    const algorithm: SearchAlgorithms = c.req.param("algorithm");
+    const body = await c.req.json<SearchRequestBody>().catch(() => null);
+    if (!body) throw Errors.INVALID_BODY();
 
-function onlyNumbers(arr: Array<unknown>): boolean {
-    return arr.every(element => {
-        return typeof element === "number";
-    });
-}
+    const error = validateArray(c, body.arr);
+    if (error) return error;
+
+    if (typeof body.target !== "number") {
+        return c.json({
+            error: "Target needs to be a number",
+        }, 422);
+    }
+
+    if (!arrayIsSorted(body.arr)) {
+        return c.json({
+            error: "Array needs to be sorted in ascending order in order to perform a search",
+        }, 422);
+    }
+
+    const fn = searchAlgorithmMap[algorithm]?.fn;
+
+    if (!fn) {
+        return c.json({
+            error: "Unknown algorithm",
+        }, 404);
+    }
+
+    const start = performance.now();
+    const result = fn(body.arr, body.target);
+    const end = performance.now();
+
+    return c.json({
+        time: end - start,
+        result,
+    }, 200);
+});
+
+export default algorithms;
