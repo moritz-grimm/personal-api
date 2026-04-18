@@ -3,15 +3,11 @@ import { describe, expect, test } from "vitest";
 import app from "../../src/app.js";
 
 describe("GET /status", () => {
-    test("returns 200", async() => {
-        const res = await app.request("/status");
-        expect(res.status).toBe(200);
-    });
-
-    test("returns expected body", async() => {
+    test("returns 200 with list of all monitors", async() => {
         const res = await app.request("/status");
         const body = await res.json();
 
+        expect(res.status).toBe(200);
         expect(Array.isArray(body)).toBe(true);
         for (const entry of body as unknown[]) {
             expect(entry).toMatchObject({
@@ -33,7 +29,7 @@ describe("GET /status/:monitor", () => {
         expect(res.status).toBe(404);
     });
 
-    test("returns 200 and monitor in body on success with slug", async() => {
+    test("returns monitor by slug", async() => {
         const res = await app.request("/status/homepage");
         const body = await res.json();
 
@@ -47,7 +43,7 @@ describe("GET /status/:monitor", () => {
         expect(body).toHaveProperty("ping");
     });
 
-    test("returns 200 and monitor in body on success with full address", async() => {
+    test("returns monitor by full address", async() => {
         const res = await app.request("/status/www.moritz-grimm.dev");
         const body = await res.json();
 

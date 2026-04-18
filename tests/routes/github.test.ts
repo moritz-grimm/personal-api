@@ -3,23 +3,20 @@ import { describe, expect, test } from "vitest";
 import app from "../../src/app.js";
 
 describe("GET /github", () => {
-    test("returns 400", async() => {
+    test("returns 400 with error message if no format is given", async() => {
         const res = await app.request("/github");
+
         expect(res.status).toBe(400);
         expect(await res.text()).toBe("Invalid format. Use 'json' or 'text'.");
     })
 })
 
 describe("GET /github?format=text", () => {
-    test("returns 200", async() => {
-        const res = await app.request("/github?format=text");
-        expect(res.status).toBe(200);
-    });
-
-    test("returns expected body", async() => {
+    test("returns 200 with formatted profile text", async() => {
         const res = await app.request("/github?format=text");
         const body = await res.text();
 
+        expect(res.status).toBe(200);
         expect(body).toMatch(/^Hi, I'm .+, a developer based in .+\./s);
         expect(body).toMatch(/You can reach me at .+ or find me on GitHub/s);
         expect(body).toMatch(/I maintain \d+ public repositories with a combined \d+ stars/s);
@@ -28,15 +25,11 @@ describe("GET /github?format=text", () => {
 });
 
 describe("GET /github?format=json", () => {
-    test("returns 200", async() => {
-        const res = await app.request("/github?format=json");
-        expect(res.status).toBe(200);
-    });
-
-    test("returns expected body", async() => {
+    test("returns 200 with profile data as JSON", async() => {
         const res = await app.request("/github?format=json");
         const body = await res.json() as Record<string, unknown>;
 
+        expect(res.status).toBe(200);
         expect(body).toMatchObject({
             name: expect.any(String),
             email: expect.stringMatching(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/),

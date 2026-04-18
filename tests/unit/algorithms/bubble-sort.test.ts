@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { bubbleSort } from "../../../src/routes/algorithms/bubble-sort.js";
 
-describe("GET /algorithms/bubble-sort", () => {
+describe("bubble-sort", () => {
     test("sorts an unsorted array", () => {
         expect(bubbleSort([3, 2, 1])).toEqual([1, 2, 3]);
     });
