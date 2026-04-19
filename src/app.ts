@@ -3,7 +3,7 @@ import { HTTPException } from "hono/http-exception";
 import { corsMiddleware } from "./middleware/cors.js";
 import { umami } from "./middleware/umami.js";
 import fourhundredeighteen from "./routes/418/index.js";
-import algorithms from "./routes/algorithms/algorithms.js";
+import algorithms from "./routes/algorithms.js";
 import api from "./routes/api.js";
 import github from "./routes/github.js";
 import { impressum } from "./routes/impressum.js";

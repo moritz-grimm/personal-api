@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { elonSort } from "../../../../src/routes/algorithms/sorting/elon-sort.js";
+import { elonSort } from "../../../../src/algorithms/sorting/elon-sort.js";
 
 describe.skipIf(process.env.RUN_SLOW !== "1")("elon-sort", () => {
     test("returns array with same length", async() => {
