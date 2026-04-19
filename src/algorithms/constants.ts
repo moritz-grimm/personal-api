@@ -5,22 +5,22 @@ import { selectionSort } from "./sorting/selection-sort.js";
 
 export const MAX_ARRAY_SIZE = 2_000;
 export type SortRequestBody = {
-    arr: Array<number>
+    arr: Array<number>;
 };
 export type SearchRequestBody = {
-    arr: Array<number>,
-    target: number,
+    arr: Array<number>;
+    target: number;
 };
 
 type SortingAlgorithmMap = Record<string, {
     fn: (arr: number[]) =>
-        number[] | Promise<number[]>,
-    description: string,
+        number[] | Promise<number[]>;
+    description: string;
 }>;
 
 type SearchAlgorithmMap = Record<string, {
-    fn: (arr: Array<number>, target: number) => number,
-    description: string,
+    fn: (arr: Array<number>, target: number) => number;
+    description: string;
 }>;
 
 export const sortingAlgorithmMap: SortingAlgorithmMap = {

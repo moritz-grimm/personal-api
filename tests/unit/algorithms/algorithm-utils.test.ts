@@ -10,7 +10,7 @@ describe("isNumberArray", () => {
     });
 
     test("returns false if array contains something else", () => {
-        const arr = [ 2, 4, 6, 8 , "hello world" ];
+        const arr = [ 2, 4, 6, 8, "hello world" ];
         expect(isNumberArray(arr)).toBe(false);
     });
 });
@@ -53,14 +53,14 @@ describe("validateArray", () => {
     });
 
     test("returns 422 if array contains anything other than numbers", () => {
-        const arr = [5, 1, 3, "Hello World", 22, 3];
+        const arr = [ 5, 1, 3, "Hello World", 22, 3 ];
         const res = validateArray(mockContext, arr);
 
         expect(res?.status).toBe(422);
     });
 
     test("returns null if array is valid", () => {
-        const arr = [2, 3, 1, 8, 2, 4, 8];
+        const arr = [ 2, 3, 1, 8, 2, 4, 8 ];
         const res = validateArray(mockContext, arr);
 
         expect(res).toBeNull();

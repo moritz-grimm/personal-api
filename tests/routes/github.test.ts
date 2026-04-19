@@ -8,8 +8,8 @@ describe("GET /github", () => {
 
         expect(res.status).toBe(400);
         expect(await res.text()).toBe("Invalid format. Use 'json' or 'text'.");
-    })
-})
+    });
+});
 
 describe("GET /github?format=text", () => {
     test("returns 200 with formatted profile text", async() => {
@@ -37,7 +37,7 @@ describe("GET /github?format=json", () => {
             bio: expect.any(String),
             profileUrl: "https://github.com/moritz-grimm",
             createdAt: "2024-10-21T19:20:41Z",
-            topLanguages: expect.arrayContaining([expect.any(String)]),
+            topLanguages: expect.arrayContaining([ expect.any(String) ]),
             followerCount: expect.any(Number),
             publicRepos: expect.any(Number),
             totalStarCount: expect.any(Number),

@@ -7,19 +7,21 @@
         "start": "node dist/src/index.js",
         "test": "vitest run",
         "test:coverage": "vitest run --coverage",
-        "test:watch": "vitest"
+        "test:watch": "vitest",
+        "lint": "bunx eslint",
+        "lint:fix": "bunx eslint --fix"
     },
     "dependencies": {
-        "@hono/node-server": "^1.19.11",
-        "hono": "^4.12.7"
+        "@hono/node-server": "^1.19.14",
+        "hono": "^4.12.14"
     },
     "devDependencies": {
-        "@moritz-grimm/eslint-config": "^2.0.0",
+        "@moritz-grimm/eslint-config": "^2.2.0",
         "@octokit/types": "^16.0.0",
-        "@types/node": "^20.11.17",
+        "@types/node": "^20.19.39",
         "@vitest/coverage-v8": "4.1.1",
-        "tsx": "^4.7.1",
-        "typescript": "^5.8.3",
-        "vitest": "^4.1.1"
+        "tsx": "^4.21.0",
+        "typescript": "^5.9.3",
+        "vitest": "^4.1.4"
     }
 }

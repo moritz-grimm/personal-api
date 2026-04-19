@@ -6,7 +6,7 @@ export const status = new Hono();
 let cache: { data: StatusEntry[]; time: number } | null = null;
 
 status.get("/", async(c) => {
-    if (cache && Date.now() - cache.time < TTL ) {
+    if (cache && Date.now() - cache.time < TTL) {
         return c.json(cache.data);
     }
 

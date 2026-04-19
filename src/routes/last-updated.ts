@@ -5,7 +5,7 @@ type Commits = Endpoints["GET /repos/{owner}/{repo}/commits"]["response"]["data"
 
 export const lastUpdated = new Hono();
 
-const cache = new Map<string, { lastUpdated: string, time :number }>();
+const cache = new Map<string, { lastUpdated: string; time: number }>();
 const CACHE_TTL = 3600000; // 1h
 
 lastUpdated.get("/:repo?", async(c) => {
@@ -26,7 +26,7 @@ lastUpdated.get("/:repo?", async(c) => {
         return c.json({ lastUpdated: "Unknown" });
     }
 
-    cache.set(repo, { lastUpdated: date , time: Date.now() });
+    cache.set(repo, { lastUpdated: date, time: Date.now() });
 
     return c.json({ lastUpdated: date });
 });

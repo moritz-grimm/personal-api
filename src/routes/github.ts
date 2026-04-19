@@ -45,7 +45,7 @@ github.get("/", async(c) => {
     const topLanguages = Object.entries(langCounts)
         .sort((a, b) => b[1] - a[1])
         .slice(0, 3)
-        .map(([lang]) => lang);
+        .map(([ lang ]) => lang);
 
     if (format === "text") {
         return c.text(`Hi, I'm ${user.name}, a developer based in ${user.location}.

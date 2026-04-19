@@ -33,8 +33,8 @@ describe("GET /418/:pot", () => {
             const res = await app.request(`/418/${pot}`);
             const body = await res.text();
 
-            expect([200, 403]).toContain(res.status);
-            expect(["No coffee available", `Enjoy your coffee from ${pot}`]).toContain(body);
+            expect([ 200, 403 ]).toContain(res.status);
+            expect([ "No coffee available", `Enjoy your coffee from ${pot}` ]).toContain(body);
         }
     });
 });

@@ -9,13 +9,13 @@ const algorithms = new Hono();
 algorithms.get("/", (c) => {
     return c.json({
         sorting: Object.fromEntries(
-            Object.entries(sortingAlgorithmMap).map(([key, { description }]) => [
+            Object.entries(sortingAlgorithmMap).map(([ key, { description }]) => [
                 key,
                 { href: `/sorting/${key}`, description },
             ]),
         ),
         search: Object.fromEntries(
-            Object.entries(searchAlgorithmMap).map(([key, { description }]) => [
+            Object.entries(searchAlgorithmMap).map(([ key, { description }]) => [
                 key,
                 { href: `/search/${key}`, description },
             ]),

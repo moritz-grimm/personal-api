@@ -1,7 +1,7 @@
-export const ALLOWED_ADDITIONS = ["cream", "half-and-half", "milk", "sugar", "sweetener", "vanilla", "cinnamon", "hazelnut", "syrup"] as const;
+export const ALLOWED_ADDITIONS = [ "cream", "half-and-half", "milk", "sugar", "sweetener", "vanilla", "cinnamon", "hazelnut", "syrup" ] as const;
 export type AllowedAdditions = typeof ALLOWED_ADDITIONS[number];
 
-export const AVAILABLE_POTS = ["pot-1", "pot-2", "pot-3"] as const;
+export const AVAILABLE_POTS = [ "pot-1", "pot-2", "pot-3" ] as const;
 export type AvailablePots = typeof AVAILABLE_POTS[number];
 
 export type PotState = {
@@ -21,9 +21,9 @@ const defaultPotState = (): PotState => ({
 //     AVAILABLE_POTS.map((pot) => [pot, defaultPotState()]),
 // );
 export const potStates = new Map<AvailablePots, PotState>([
-    ["pot-1", { hasWater: true, hasCoffee: true, isOperational: true }],
-    ["pot-2", { hasWater: false, hasCoffee: false, isOperational: true }],
-    ["pot-3", { hasWater: true, hasCoffee: true, isOperational: false }],
+    [ "pot-1", { hasWater: true, hasCoffee: true, isOperational: true }],
+    [ "pot-2", { hasWater: false, hasCoffee: false, isOperational: true }],
+    [ "pot-3", { hasWater: true, hasCoffee: true, isOperational: false }],
 ]);
 
 export type PotInfo = {
@@ -35,7 +35,7 @@ export type PotInfo = {
     brewerVersion: string;
 };
 
-export const POT_INFO: Record<AvailablePots, { name: string, age: string, capacity: string }> = {
+export const POT_INFO: Record<AvailablePots, { name: string; age: string; capacity: string }> = {
     "pot-1": { name: "Brühhilde", age: "4", capacity: "1.5L" },
     "pot-2": { name: "Sir Brews-a-Lot", age: "12", capacity: "0.8L" },
     "pot-3": { name: "Brewbacca", age: "6", capacity: "4.2L" },

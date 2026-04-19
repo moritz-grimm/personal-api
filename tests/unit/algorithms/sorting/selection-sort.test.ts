@@ -3,11 +3,11 @@ import { selectionSort } from "../../../../src/algorithms/sorting/selection-sort
 
 describe("selection-sort", () => {
     test("returns sorted array", () => {
-        expect(selectionSort([3, 2, 1])).toEqual([1, 2, 3]);
+        expect(selectionSort([ 3, 2, 1 ])).toEqual([ 1, 2, 3 ]);
     });
 
     test("returns sorted array if already sorted", () => {
-        expect(selectionSort([1, 2, 3])).toEqual([1, 2, 3]);
+        expect(selectionSort([ 1, 2, 3 ])).toEqual([ 1, 2, 3 ]);
     });
 
     test("returns empty array on empty input", () => {
@@ -15,6 +15,6 @@ describe("selection-sort", () => {
     });
 
     test("returns sorted array with negative numbers", () => {
-        expect(selectionSort([- 55, 1, 2, -7, 11])).toEqual([-55, -7, 1, 2, 11]);
+        expect(selectionSort([ - 55, 1, 2, -7, 11 ])).toEqual([ -55, -7, 1, 2, 11 ]);
     });
 });
