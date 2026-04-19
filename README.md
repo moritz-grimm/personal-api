@@ -42,13 +42,14 @@ Lists all available endpoints dynamically based on registered routes.
 
 Returns a greeting text.
 
-### `GET /github`
+### `GET /github/:user?`
 
-Returns GitHub profile and repository data. Requires the `format` query parameter.
+Returns GitHub profile and repository data. Requires the `format` query parameter. Defaults to `moritz-grimm` if no user is specified.
 
-| Parameter | Values         | Description     |
-| --------- | -------------- | --------------- |
-| `format`  | `json`, `text` | Response format |
+| Parameter | Values              | Description                     |
+| --------- | ------------------- | ------------------------------- |
+| `format`  | `json`, `text`      | Response format                 |
+| `:user`   | any GitHub username | GitHub user to query (optional) |
 
 **`GET /github?format=json`** returns profile data including name, email, location, bio, top languages, follower count, public repos, and total star count.
 
