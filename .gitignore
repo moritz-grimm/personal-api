@@ -26,7 +26,6 @@ lerna-debug.log*
 
 # misc
 .DS_Store
-
 todo.md
 
 # vitest
@@ -34,3 +33,6 @@ todo.md
 
 # build
 /dist
+
+# npm
+package-log.json
