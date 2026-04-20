@@ -11,11 +11,24 @@ import info from "./routes/info.js";
 import { lastUpdated } from "./routes/last-updated.js";
 import { privacyPolicy } from "./routes/privacy-policy.js";
 import { status } from "./routes/status/status.js";
+import { rateLimiter } from "./lib/rate-limiter.js";
 
 const app = new Hono();
+const rateLimitOptions = { maxRequests: 10, windowMs: 15 * 60 * 1000 };
 
 app.use("*", corsMiddleware);
 app.use("*", umami);
+
+app.use("/418", rateLimiter(rateLimitOptions));
+app.use("/fourhundredeighteen", rateLimiter(rateLimitOptions));
+app.use("/algorithms", rateLimiter(rateLimitOptions));
+app.use("/status", rateLimiter(rateLimitOptions));
+app.use("/", rateLimiter(rateLimitOptions));
+app.use("/github", rateLimiter(rateLimitOptions));
+app.use("/impressum", rateLimiter(rateLimitOptions));
+app.use("/info", rateLimiter(rateLimitOptions));
+app.use("/last-updated", rateLimiter(rateLimitOptions));
+app.use("/privacy-policy", rateLimiter(rateLimitOptions));
 
 app.route("/418", fourhundredeighteen);
 app.route("/fourhundredeighteen", fourhundredeighteen);
