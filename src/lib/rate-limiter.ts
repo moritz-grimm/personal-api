@@ -28,6 +28,7 @@ export function rateLimiter({ maxRequests, windowMs, whitelist }: RateLimiterOpt
 
     return async(c, next) => {
         const ip = c.req.header("x-forwarded-for")?.split(",")[0]?.trim() || c.req.header("x-real-ip") || "unknown";
+        console.log(ip);
         if (whitelist.includes(ip)) return next();
         const now = Date.now();
         const timestamps = store.get(ip);
