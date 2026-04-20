@@ -14,7 +14,7 @@ import { status } from "./routes/status/status.js";
 import { rateLimiter, type RateLimiterOptions } from "./lib/rate-limiter.js";
 
 const app = new Hono();
-const rateLimitOptions: RateLimiterOptions = { maxRequests: 10, windowMs: 15 * 60 * 1000, whitelist: [ "10.0.2.3" ] };
+const rateLimitOptions: RateLimiterOptions = { maxRequests: 10, windowMs: 15 * 60 * 1000, whitelist: [ "10.0.1.1" ] };
 
 app.use("*", corsMiddleware);
 app.use("*", umami);
