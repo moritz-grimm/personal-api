@@ -3,9 +3,10 @@ import type { MiddlewareHandler } from "hono";
 export type RateLimiterOptions = {
     maxRequests: number;
     windowMs: number;
+    whitelist: Array<string>;
 };
 
-export function rateLimiter({ maxRequests, windowMs }: RateLimiterOptions): MiddlewareHandler {
+export function rateLimiter({ maxRequests, windowMs, whitelist }: RateLimiterOptions): MiddlewareHandler {
     const store = new Map<string, number[]>(); // Map<ip, request timestamp>
 
     // Cleanup stale entries every 5 minutes
@@ -27,6 +28,7 @@ export function rateLimiter({ maxRequests, windowMs }: RateLimiterOptions): Midd
 
     return async(c, next) => {
         const ip = c.req.header("x-forwarded-for")?.split(",")[0]?.trim() || c.req.header("x-real-ip") || "unknown";
+        if (whitelist.includes(ip)) return next();
         const now = Date.now();
         const timestamps = store.get(ip);
 

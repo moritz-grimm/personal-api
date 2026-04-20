@@ -11,10 +11,10 @@ import info from "./routes/info.js";
 import { lastUpdated } from "./routes/last-updated.js";
 import { privacyPolicy } from "./routes/privacy-policy.js";
 import { status } from "./routes/status/status.js";
-import { rateLimiter } from "./lib/rate-limiter.js";
+import { rateLimiter, type RateLimiterOptions } from "./lib/rate-limiter.js";
 
 const app = new Hono();
-const rateLimitOptions = { maxRequests: 10, windowMs: 15 * 60 * 1000 };
+const rateLimitOptions: RateLimiterOptions = { maxRequests: 10, windowMs: 15 * 60 * 1000, whitelist: [ "178.104.71.4" ] };
 
 app.use("*", corsMiddleware);
 app.use("*", umami);
