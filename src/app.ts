@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
+import { rateLimiter, type RateLimiterOptions } from "./lib/rate-limiter.js";
 import { corsMiddleware } from "./middleware/cors.js";
 import { umami } from "./middleware/umami.js";
 import fourhundredeighteen from "./routes/418/index.js";
@@ -8,10 +9,9 @@ import api from "./routes/api.js";
 import github from "./routes/github.js";
 import { impressum } from "./routes/impressum.js";
 import info from "./routes/info.js";
-import { lastUpdated } from "./routes/last-updated.js";
+import lastUpdated from "./routes/last-updated.js";
 import { privacyPolicy } from "./routes/privacy-policy.js";
 import { status } from "./routes/status/status.js";
-import { rateLimiter, type RateLimiterOptions } from "./lib/rate-limiter.js";
 
 const app = new Hono();
 const rateLimitOptions: RateLimiterOptions = { maxRequests: 100, windowMs: 15 * 60 * 1000, whitelist: [ "10.0.1.1" ] };

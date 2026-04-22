@@ -13,7 +13,8 @@
     },
     "dependencies": {
         "@hono/node-server": "^1.19.14",
-        "hono": "^4.12.14"
+        "hono": "^4.12.14",
+        "redis": "^5.12.1"
     },
     "devDependencies": {
         "@moritz-grimm/eslint-config": "^2.2.0",
