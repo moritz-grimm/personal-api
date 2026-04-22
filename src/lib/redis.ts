@@ -1,14 +1,15 @@
 import { createClient } from "redis";
 
-export const redis = await createClient({
+export const redis = createClient({
     url: process.env.REDIS_URL,
     password: process.env.REDIS_PASSWORD,
-})
-    .on("error", (err) => console.log("Redis Client Error", err))
-    .connect();
+}).on("error", (err: NodeJS.ErrnoException) => console.error("Redis Client Error", err.code ?? err));
 
-if (redis.isReady) {
+try {
+    await redis.connect();
     console.log("Connection to redis database established");
+} catch (err) {
+    console.error("Redis initial connect failed", err ?? err);
 }
 
 export async function cacheGet(key: string): Promise<string | null> {
