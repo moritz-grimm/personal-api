@@ -15,6 +15,8 @@ npm run dev
 
 The API runs at `http://localhost:3000`.
 
+A [Redis](https://redis.io/) instance is optional. If configured, it is used for response caching on `/github`, `/status`, and `/last-updated`. If Redis is unavailable, these routes still work, caching is simply skipped.
+
 ## Scripts
 
 | Command                 | Description                      |
@@ -28,9 +30,11 @@ The API runs at `http://localhost:3000`.
 
 ## Environment Variables
 
-| Variable       | Description                                             |
-| -------------- | ------------------------------------------------------- |
-| `GITHUB_TOKEN` | GitHub personal access token for the `/github` endpoint |
+| Variable         | Description                                             |
+| ---------------- | ------------------------------------------------------- |
+| `GITHUB_TOKEN`   | GitHub personal access token for the `/github` endpoint |
+| `REDIS_URL`      | Redis connection URL (e.g. `redis://localhost:6379`)    |
+| `REDIS_PASSWORD` | Redis password (optional)                               |
 
 ## Endpoints
 
