@@ -1,5 +1,10 @@
 import { createClient } from "redis";
 
+type NamespacedCache = {
+    get: (key: string) => Promise<string | null>;
+    set: (key: string, value: string, ttlSeconds: number) => Promise<void>;
+};
+
 export const redis = createClient({
     url: process.env.REDIS_URL,
     password: process.env.REDIS_PASSWORD,
@@ -27,4 +32,11 @@ export async function cacheSet(key: string, value: string, ttlSeconds: number): 
     } catch (err) {
         console.error(`Redis set failed for key '${key}'`, err);
     }
+}
+
+export function namespacedCache(namespace: string): NamespacedCache {
+    return {
+        get: (key: string): Promise<string | null> => cacheGet(`${namespace}:${key}`),
+        set: (key: string, value: string, ttlSeconds: number): Promise<void> => cacheSet(`${namespace}:${key}`, value, ttlSeconds),
+    };
 }
