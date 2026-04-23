@@ -1,7 +1,7 @@
 import type { Context } from "hono";
 import { describe, expect, test } from "vitest";
-import { arrayIsSorted, isNumberArray, validateArray } from "../../../src/algorithms/algorithm-utils.js";
-import { MAX_ARRAY_SIZE } from "../../../src/algorithms/constants.js";
+import { arrayIsSorted, isNumberArray, validateArray } from "../../../src/lib/algorithms/algorithms.utils.js";
+import { MAX_ARRAY_SIZE } from "../../../src/lib/algorithms/algorithms.constants.js";
 
 describe("isNumberArray", () => {
     test("returns true if array only contains numbers", () => {

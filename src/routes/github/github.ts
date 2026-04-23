@@ -1,23 +1,11 @@
-import type { Endpoints } from "@octokit/types";
 import { Hono, type Context } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
-import { namespacedCache } from "../lib/redis.js";
-
-type RepoListResponse = Endpoints["GET /users/{username}/repos"]["response"]["data"];
-type UserResponse = Endpoints["GET /user"]["response"]["data"]; // Typo UserReponse => UserResponse
-type Format = "json" | "text";
-type Cache = {
-    user: UserResponse;
-    starCount: number;
-    topLanguages: Array<string>;
-};
+import { namespacedCache } from "../../lib/redis.js";
+import { EXCLUDED_LANGUAGES, TTL, type Cache, type Format, type RepoListResponse, type UserResponse } from "./github.constants.js";
 
 const github = new Hono();
 
 const cache = namespacedCache("github");
-const TTL = 3600; // 1h
-
-const EXCLUDED_LANGUAGES = new Set([ "PowerShell" ]); // Exclude PowerShell: skews top languages due to one public repos despite minimal experience
 
 github.get("/:user?", async(c) => {
     const format = c.req.query("format") as Format;

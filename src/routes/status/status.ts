@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { monitorSlugMap, TTL, type HeartbeatResponse, type StatusEntry, type StatusPageResponse } from "./constants.js";
+import { monitorSlugMap, TTL, type HeartbeatResponse, type StatusEntry, type StatusPageResponse } from "./status.constants.js";
 
 export const status = new Hono();
 

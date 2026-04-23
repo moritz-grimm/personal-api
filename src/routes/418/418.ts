@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { ALLOWED_ADDITIONS, AVAILABLE_POTS, POT_INFO, potStates, type AllowedAdditions, type AvailablePots, type PotInfo } from "./constants.js";
+import { ALLOWED_ADDITIONS, AVAILABLE_POTS, POT_INFO, potStates, type AllowedAdditions, type AvailablePots, type PotInfo } from "./418.constants.js";
 
 const fourhundredeighteen = new Hono();
 

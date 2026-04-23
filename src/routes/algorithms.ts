@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import { Errors } from "../errors.js";
-import type { SearchAlgorithms, SearchRequestBody, SortingAlgorithms, SortRequestBody } from "../algorithms/constants.js";
-import { searchAlgorithmMap, sortingAlgorithmMap } from "../algorithms/constants.js";
-import { arrayIsSorted, validateArray } from "../algorithms/algorithm-utils.js";
+import { arrayIsSorted, validateArray } from "../lib/algorithms/algorithms.utils.js";
+import type { SearchAlgorithms, SearchRequestBody, SortingAlgorithms, SortRequestBody } from "../lib/algorithms/algorithms.constants.js";
+import { searchAlgorithmMap, sortingAlgorithmMap } from "../lib/algorithms/algorithms.constants.js";
 
 const algorithms = new Hono();
 

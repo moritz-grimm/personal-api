@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import app from "../../src/app.js";
-import { ALLOWED_ADDITIONS, AVAILABLE_POTS, POT_INFO, potStates } from "../../src/routes/418/constants.js";
+import { ALLOWED_ADDITIONS, AVAILABLE_POTS, POT_INFO, potStates } from "../../src/routes/418/418.constants.js";
 
 describe("GET /418", () => {
     test("returns 200 with HTCPCP protocol info", async() => {

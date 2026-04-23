@@ -1,5 +1,5 @@
 import type { Context } from "hono";
-import { MAX_ARRAY_SIZE } from "./constants.js";
+import { MAX_ARRAY_SIZE } from "./algorithms.constants.js";
 
 export function isNumberArray(arr: Array<unknown>): boolean {
     return arr.every(element => {

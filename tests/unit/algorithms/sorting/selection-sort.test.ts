@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { selectionSort } from "../../../../src/algorithms/sorting/selection-sort.js";
+import { selectionSort } from "../../../../src/lib/algorithms/sorting/selection-sort.js";
 
 describe("selection-sort", () => {
     test("returns sorted array", () => {

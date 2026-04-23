@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { searchAlgorithmMap, sortingAlgorithmMap } from "../../src/algorithms/constants.js";
+import { searchAlgorithmMap, sortingAlgorithmMap } from "../../src/lib/algorithms/algorithms.constants.js";
 import app from "../../src/app.js";
 
 type Result = {

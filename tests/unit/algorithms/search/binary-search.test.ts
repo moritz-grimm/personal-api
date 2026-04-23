@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { binarySearch } from "../../../../src/algorithms/search/binary-search.js";
+import { binarySearch } from "../../../../src/lib/algorithms/search/binary-search.js";
 
 describe("binarySearch", () => {
     test("returns index of target", () => {
