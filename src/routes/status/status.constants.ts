@@ -41,4 +41,4 @@ export const monitorSlugMap: Record<string, string> = {
     "knowledge.moritz-grimm.dev": "knowledge",
 };
 
-export const TTL = 60_000; // 60s
+export const TTL = 60; // 60s

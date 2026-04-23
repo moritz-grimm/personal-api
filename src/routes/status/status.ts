@@ -1,31 +1,31 @@
 import { Hono } from "hono";
+import { namespacedCache } from "../../lib/redis.js";
 import { monitorSlugMap, TTL, type HeartbeatResponse, type StatusEntry, type StatusPageResponse } from "./status.constants.js";
 
-export const status = new Hono();
-
-let cache: { data: StatusEntry[]; time: number } | null = null;
+const status = new Hono();
+const cache = namespacedCache("status");
 
 status.get("/", async(c) => {
-    if (cache && Date.now() - cache.time < TTL) {
-        return c.json(cache.data);
-    }
+    const cached = await cache.get("all");
+    if (cached) return c.json(JSON.parse(cached));
 
-    const res = await fetchMonitors();
-    cache = { data: res, time: Date.now() };
+    const monitors = await fetchMonitors();
+    await cache.set("all", JSON.stringify(monitors), TTL);
 
-    return c.json(res);
+    return c.json(monitors);
 });
 
 status.get("/:monitor", async(c) => {
     const monitor = c.req.param("monitor");
+
+    const cached = await cache.get(monitor);
+    if (cached) return c.json(JSON.parse(cached));
+
     const statusList = await fetchMonitors();
-
     const found = statusList.find(entry => entry.name === monitor || entry.slug === monitor);
+    if (!found) return c.json({ error: "Monitor not found" }, 404);
 
-    if (!found) {
-        return c.json({ error: "Monitor not found" }, 404);
-    }
-
+    await cache.set(monitor, JSON.stringify(found), TTL);
     return c.json(found);
 });
 

@@ -11,7 +11,7 @@ import { impressum } from "./routes/impressum.js";
 import info from "./routes/info.js";
 import lastUpdated from "./routes/last-updated.js";
 import { privacyPolicy } from "./routes/privacy-policy.js";
-import { status } from "./routes/status/status.js";
+import status from "./routes/status/status.js";
 
 const app = new Hono();
 const rateLimitOptions: RateLimiterOptions = { maxRequests: 100, windowMs: 15 * 60 * 1000, whitelist: [ "10.0.1.1" ] };
