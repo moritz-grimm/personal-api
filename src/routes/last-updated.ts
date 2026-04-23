@@ -1,16 +1,17 @@
 import type { Endpoints } from "@octokit/types";
 import { Hono } from "hono";
-import { cacheGet, cacheSet } from "../lib/redis.js";
+import { namespacedCache } from "../lib/redis.js";
 
 type Commits = Endpoints["GET /repos/{owner}/{repo}/commits"]["response"]["data"];
 
 const lastUpdated = new Hono();
 
+const cache = namespacedCache("last-updated");
 const TTL = 3600; // 1h
 
 lastUpdated.get("/:repo?", async(c) => {
     const repo = c.req.param("repo") ?? "personal-api";
-    const cached = await cacheGet(repo);
+    const cached = await cache.get(repo);
 
     if (cached) return c.json({ lastUpdated: cached });
 
@@ -20,11 +21,9 @@ lastUpdated.get("/:repo?", async(c) => {
     const commits = await response.json() as Commits;
     const date = commits[0].commit.committer?.date?.split("T")[0] ?? null;
 
-    if (!date) {
-        return c.json({ lastUpdated: "Unknown" });
-    }
+    if (!date) return c.json({ lastUpdated: "Unknown" });
 
-    await cacheSet(repo, date, TTL);
+    await cache.set(repo, date, TTL);
 
     return c.json({ lastUpdated: date });
 });
