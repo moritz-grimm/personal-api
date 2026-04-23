@@ -1,27 +1,23 @@
 import type { Endpoints } from "@octokit/types";
 import { Hono, type Context } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
-import { existsSync } from "node:fs";
-import path from "node:path";
 import { namespacedCache } from "../lib/redis.js";
 
 type RepoListResponse = Endpoints["GET /users/{username}/repos"]["response"]["data"];
-type UserReponse = Endpoints["GET /user"]["response"]["data"]; // Typo UserReponse => UserResponse
+type UserResponse = Endpoints["GET /user"]["response"]["data"]; // Typo UserReponse => UserResponse
 type Format = "json" | "text";
 type Cache = {
-    user: UserReponse;
+    user: UserResponse;
     starCount: number;
     topLanguages: Array<string>;
 };
-const envPath = path.join(process.cwd(), ".env");
-const EXCLUDED_LANGUAGES = new Set([ "PowerShell" ]); // Exclude PowerShell: skews top languages due to one public repos despite minimal experience
-if (existsSync(envPath)) { // TODO: Replace with process.env
-    process.loadEnvFile(envPath);
-}
 
 const github = new Hono();
+
 const cache = namespacedCache("github");
 const TTL = 3600; // 1h
+
+const EXCLUDED_LANGUAGES = new Set([ "PowerShell" ]); // Exclude PowerShell: skews top languages due to one public repos despite minimal experience
 
 github.get("/:user?", async(c) => {
     const format = c.req.query("format") as Format;
@@ -36,33 +32,23 @@ github.get("/:user?", async(c) => {
     }
 
     const githubToken = process.env.GITHUB_TOKEN;
-    let userResponse;
-    if (userParam === "moritz-grimm") { // ? Why even this if/else?
-        userResponse = await fetch("https://api.github.com/user", {
-            headers: { Authorization: `Bearer ${githubToken}` },
-        });
-    } else {
-        userResponse = await fetch(`https://api.github.com/users/${userParam}`, {
-            headers: { Authorization: `Bearer ${githubToken}` },
-        });
-    }
+    const userResponse = await fetch(`https://api.github.com/users/${userParam}`, {
+        headers: { Authorization: `Bearer ${githubToken}` },
+    });
     const reposResponse = await fetch(`https://api.github.com/users/${userParam}/repos`, {
         headers: { Authorization: `Bearer ${githubToken}` },
     });
 
-    // ? Why return .status two times?
     if (!userResponse.ok) return c.text("API Response Error: " + userResponse.status, userResponse.status as ContentfulStatusCode);
     if (!reposResponse.ok) return c.text("API Response Error: " + reposResponse.status, reposResponse.status as ContentfulStatusCode);
 
     const repos = await reposResponse.json() as RepoListResponse;
-    const user = await userResponse.json() as UserReponse;
+    const user = await userResponse.json() as UserResponse;
     const starCount = repos.reduce((sum, repo) => sum + (repo.stargazers_count ?? 0), 0);
     const langCounts = repos.reduce((acc, repo) => {
         if (repo.language && !EXCLUDED_LANGUAGES.has(repo.language)) acc[repo.language] = (acc[repo.language] ?? 0) + 1;
         return acc;
     }, {} as Record<string, number>);
-
-    console.log(langCounts);
 
     const topLanguages = Object.entries(langCounts)
         .sort((a, b) => b[1] - a[1])
@@ -76,7 +62,7 @@ github.get("/:user?", async(c) => {
 
 export default github;
 
-function respond(c: Context, format: Format, user: UserReponse, starCount: number, topLanguages: Array<string>): Response {
+function respond(c: Context, format: Format, user: UserResponse, starCount: number, topLanguages: Array<string>): Response {
     if (format === "text") {
         return textResponse(c, user, starCount, topLanguages);
     }
@@ -84,7 +70,7 @@ function respond(c: Context, format: Format, user: UserReponse, starCount: numbe
     return jsonResponse(c, user, starCount, topLanguages);
 }
 
-function jsonResponse(c: Context, user: UserReponse, starCount: number, topLanguages: Array<string>): Response {
+function jsonResponse(c: Context, user: UserResponse, starCount: number, topLanguages: Array<string>): Response {
     return c.json({
         name: user.name,
         email: user.email,
@@ -99,7 +85,7 @@ function jsonResponse(c: Context, user: UserReponse, starCount: number, topLangu
     });
 }
 
-function textResponse(c: Context, user: UserReponse, starCount: number, topLanguages: Array<string>): Response {
+function textResponse(c: Context, user: UserResponse, starCount: number, topLanguages: Array<string>): Response {
     return c.text(`Hi, I'm ${user.name}, a developer based in ${user.location}.
 You can reach me at ${user.email} or find me on GitHub at ${user.html_url}.
 I maintain ${user.public_repos} public repositories with a combined ${starCount} stars.
