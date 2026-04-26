@@ -1,6 +1,7 @@
 import { Hono } from "hono";
+import { rateLimiter } from "hono-throttle";
+import type { RateLimiterOptions } from "hono-throttle/dist/types.js";
 import { HTTPException } from "hono/http-exception";
-import { rateLimiter, type RateLimiterOptions } from "./lib/rate-limiter.js";
 import { corsMiddleware } from "./middleware/cors.js";
 import { umami } from "./middleware/umami.js";
 import fourhundredeighteen from "./routes/418/418.js";
