@@ -17,6 +17,8 @@ The API runs at `http://localhost:3000`.
 
 A [Redis](https://redis.io/) instance is optional. If configured, it is used for response caching on `/github`, `/status`, and `/last-updated`. If Redis is unavailable, these routes still work, caching is simply skipped.
 
+All endpoints are rate-limited to **100 requests per 15 minutes** per IP.
+
 ## Scripts
 
 | Command                 | Description                      |
