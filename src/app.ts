@@ -1,6 +1,5 @@
 import { Hono } from "hono";
 import { rateLimiter } from "hono-throttle";
-import type { RateLimiterOptions } from "hono-throttle/dist/types.js";
 import { HTTPException } from "hono/http-exception";
 import { corsMiddleware } from "./middleware/cors.js";
 import { umami } from "./middleware/umami.js";
@@ -15,21 +14,14 @@ import { privacyPolicy } from "./routes/privacy-policy.js";
 import status from "./routes/status/status.js";
 
 const app = new Hono();
-const rateLimitOptions: RateLimiterOptions = { maxRequests: 100, windowMs: 15 * 60 * 1000, whitelist: [ "10.0.1.1" ] };
 
 app.use("*", corsMiddleware);
 app.use("*", umami);
-
-app.use("/418", rateLimiter(rateLimitOptions));
-app.use("/fourhundredeighteen", rateLimiter(rateLimitOptions));
-app.use("/algorithms", rateLimiter(rateLimitOptions));
-app.use("/status", rateLimiter(rateLimitOptions));
-app.use("/", rateLimiter(rateLimitOptions));
-app.use("/github", rateLimiter(rateLimitOptions));
-app.use("/impressum", rateLimiter(rateLimitOptions));
-app.use("/info", rateLimiter(rateLimitOptions));
-app.use("/last-updated", rateLimiter(rateLimitOptions));
-app.use("/privacy-policy", rateLimiter(rateLimitOptions));
+app.use(rateLimiter({
+    maxRequests: 5,
+    windowMs: 15 * 60 * 1000,
+    whitelist: [ "10.0.1.1" ],
+}));
 
 app.route("/418", fourhundredeighteen);
 app.route("/fourhundredeighteen", fourhundredeighteen);
