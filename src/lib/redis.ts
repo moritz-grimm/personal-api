@@ -1,16 +1,17 @@
 import { createClient } from "redis";
+import { config } from "./config.js";
 
 type NamespacedCache = {
     get: (key: string) => Promise<string | null>;
     set: (key: string, value: string, ttlSeconds: number) => Promise<void>;
 };
 
-const redisEnabled = Boolean(process.env.REDIS_URL);
+const redisEnabled = Boolean(config.REDIS_URL);
 
 export const redis = redisEnabled
     ? createClient({
-        url: process.env.REDIS_URL,
-        password: process.env.REDIS_PASSWORD,
+        url: config.REDIS_URL,
+        password: config.REDIS_PASSWORD,
         socket: {
             reconnectStrategy: (retries) => (retries > 5 ? false : Math.min(retries * 200, 2000)),
         },

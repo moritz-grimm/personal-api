@@ -1,14 +1,15 @@
 import type { MiddlewareHandler } from "hono";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
+import { config } from "../lib/config.js";
 
 const envPath = join(process.cwd(), ".env");
 if (existsSync(envPath)) {
     process.loadEnvFile(envPath);
 }
 
-const UMAMI_URL = process.env.UMAMI_URL;
-const UMAMI_WEBSITE_ID = process.env.UMAMI_WEBSITE_ID;
+const UMAMI_URL = config.UMAMI_URL;
+const UMAMI_WEBSITE_ID = config.UMAMI_WEBSITE_ID;
 
 export const umami: MiddlewareHandler = async(c, next) => {
     await next();
