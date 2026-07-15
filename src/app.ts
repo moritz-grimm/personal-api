@@ -18,7 +18,7 @@ const app = new Hono();
 app.use("*", corsMiddleware);
 app.use("*", umami);
 app.use(rateLimiter({
-    maxRequests: 5,
+    maxRequests: 100,
     windowMs: 15 * 60 * 1000,
     whitelist: [ "10.0.1.1" ],
 }));
