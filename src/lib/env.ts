@@ -1,6 +1,7 @@
 import "dotenv/config";
 
-export type Config = {
+export type Env = {
+    RATELIMIT_WHITELIST: string[];
     GITHUB_TOKEN: string;
     REDIS_URL?: string;
     REDIS_PASSWORD?: string;
@@ -9,6 +10,7 @@ export type Config = {
     RUN_SLOW?: string;
 };
 
+const ratelimitWhitelist = process.env.RATELIMIT_WHITELIST?.split(",") || [];
 const githubToken = process.env.GITHUB_TOKEN;
 const redisUrl = process.env.REDIS_URL;
 const redisPassword = process.env.REDIS_PASSWORD;
@@ -18,7 +20,8 @@ const runSlow = process.env.RUN_SLOW;
 
 if (!githubToken) throw new Error("Required .env property missing");
 
-export const config: Config = {
+export const env: Env = {
+    RATELIMIT_WHITELIST: ratelimitWhitelist,
     GITHUB_TOKEN: githubToken,
     REDIS_URL: redisUrl,
     REDIS_PASSWORD: redisPassword,

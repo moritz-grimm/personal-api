@@ -2,7 +2,7 @@ import { Hono, type Context } from "hono";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { namespacedCache } from "../../lib/redis.js";
 import { EXCLUDED_LANGUAGES, TTL, type Cache, type Format, type RepoListResponse, type UserResponse } from "./github.constants.js";
-import { config } from "../../lib/config.js";
+import { env } from "../../lib/env.js";
 
 const github = new Hono();
 
@@ -20,7 +20,7 @@ github.get("/:user?", async(c) => {
         return respond(c, format, user, starCount, topLanguages);
     }
 
-    const githubToken = config.GITHUB_TOKEN;
+    const githubToken = env.GITHUB_TOKEN;
     const userResponse = await fetch(`https://api.github.com/users/${userParam}`, {
         headers: { Authorization: `Bearer ${githubToken}` },
     });

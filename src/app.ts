@@ -12,6 +12,7 @@ import info from "./routes/info.js";
 import lastUpdated from "./routes/last-updated.js";
 import { privacyPolicy } from "./routes/privacy-policy.js";
 import status from "./routes/status/status.js";
+import { env } from "./lib/env.js";
 
 const app = new Hono();
 
@@ -20,7 +21,7 @@ app.use("*", umami);
 app.use(rateLimiter({
     maxRequests: 100,
     windowMs: 15 * 60 * 1000,
-    whitelist: [ "10.0.1.1" ],
+    whitelist: env.RATELIMIT_WHITELIST,
 }));
 
 app.route("/418", fourhundredeighteen);
