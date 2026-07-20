@@ -1,23 +1,33 @@
 import { createClient } from "redis";
+import { env } from "./env.js";
 
 type NamespacedCache = {
     get: (key: string) => Promise<string | null>;
     set: (key: string, value: string, ttlSeconds: number) => Promise<void>;
 };
 
-export const redis = createClient({
-    url: process.env.REDIS_URL,
-    password: process.env.REDIS_PASSWORD,
-}).on("error", (err: NodeJS.ErrnoException) => console.error("Redis Client Error", err.code ?? err));
+const redisEnabled = Boolean(env.REDIS_URL);
 
-try {
-    await redis.connect();
-    console.log("Connection to redis database established");
-} catch (err) {
-    console.error("Redis initial connect failed", err ?? err);
+export const redis = redisEnabled
+    ? createClient({
+        url: env.REDIS_URL,
+        password: env.REDIS_PASSWORD,
+        socket: {
+            reconnectStrategy: (retries) => (retries > 5 ? false : Math.min(retries * 200, 2000)),
+        },
+    }).on("error", (err: NodeJS.ErrnoException) => console.error("Redis Client Error", err.code ?? err))
+    : null;
+
+if (redis) {
+    redis.connect()
+        .then(() => console.log("Connection to redis database established"))
+        .catch((err) => console.error("Redis initial connect failed", err));
+} else {
+    console.warn("REDIS_URL not set – caching disabled, running without Redis");
 }
 
 export async function cacheGet(key: string): Promise<string | null> {
+    if (!redis?.isReady) return null;
     try {
         return await redis.get(key);
     } catch (err) {
@@ -27,6 +37,7 @@ export async function cacheGet(key: string): Promise<string | null> {
 }
 
 export async function cacheSet(key: string, value: string, ttlSeconds: number): Promise<void> {
+    if (!redis?.isReady) return;
     try {
         await redis.set(key, value, { expiration: { type: "EX", value: ttlSeconds } });
     } catch (err) {

@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "@hono/node-server": "^1.19.14",
+        "dotenv": "^17.4.2",
         "hono": "^4.12.14",
         "hono-throttle": "^1.0.0",
         "redis": "^5.12.1"
@@ -21,7 +22,7 @@
         "@moritz-grimm/eslint-config": "^2.2.0",
         "@octokit/types": "^16.0.0",
         "@types/node": "^20.19.39",
-        "@vitest/coverage-v8": "4.1.1",
+        "@vitest/coverage-v8": "^4.1.4",
         "tsx": "^4.21.0",
         "typescript": "^5.9.3",
         "vitest": "^4.1.4"
