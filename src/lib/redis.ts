@@ -26,7 +26,7 @@ if (redis) {
     console.warn("REDIS_URL not set – caching disabled, running without Redis");
 }
 
-export async function cacheGet(key: string): Promise<string | null> {
+async function cacheGet(key: string): Promise<string | null> {
     if (!redis?.isReady) return null;
     try {
         return await redis.get(key);
@@ -36,7 +36,7 @@ export async function cacheGet(key: string): Promise<string | null> {
     }
 }
 
-export async function cacheSet(key: string, value: string, ttlSeconds: number): Promise<void> {
+async function cacheSet(key: string, value: string, ttlSeconds: number): Promise<void> {
     if (!redis?.isReady) return;
     try {
         await redis.set(key, value, { expiration: { type: "EX", value: ttlSeconds } });
