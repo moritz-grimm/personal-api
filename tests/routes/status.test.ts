@@ -12,7 +12,7 @@ describe("GET /status", () => {
         for (const entry of body as unknown[]) {
             expect(entry).toMatchObject({
                 name: expect.any(String),
-                uptime24h: expect.any(Number),
+                uptime24h: expect.toBeOneOf([ expect.any(Number), null ]),
             });
             expect(entry).toHaveProperty("slug");
             expect(entry).toHaveProperty("href");
@@ -35,7 +35,7 @@ describe("GET /status/:monitor", () => {
 
         expect(body).toMatchObject({
             name: expect.any(String),
-            uptime24h: expect.any(Number),
+            uptime24h: expect.toBeOneOf([ expect.any(Number), null ]),
         });
         expect(body).toHaveProperty("slug");
         expect(body).toHaveProperty("href");
@@ -49,7 +49,7 @@ describe("GET /status/:monitor", () => {
 
         expect(body).toMatchObject({
             name: expect.any(String),
-            uptime24h: expect.any(Number),
+            uptime24h: expect.toBeOneOf([ expect.any(Number), null ]),
         });
         expect(body).toHaveProperty("slug");
         expect(body).toHaveProperty("href");

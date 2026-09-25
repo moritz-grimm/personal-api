@@ -32,7 +32,7 @@ export type StatusEntry = {
     href: string | undefined;
     status: number | undefined;
     ping: number | undefined;
-    uptime24h: number;
+    uptime24h: number | null;
 };
 
 export const monitorSlugMap: Record<string, string> = {
