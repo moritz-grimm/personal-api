@@ -10,10 +10,10 @@ const cache = namespacedCache("github");
 
 github.get("/:user?", async(c) => {
     const format = c.req.query("format") as Format;
-    const userParam = c.req.param("user") ?? "moritz-grimm";
-    const cached = await cache.get(userParam);
-
     if (format !== "json" && format !== "text") return c.text("Invalid format. Use 'json' or 'text'.", 400);
+
+    const userParam = c.req.param("user")?.toLowerCase() ?? "moritz-grimm";
+    const cached = await cache.get(userParam);
 
     if (cached) {
         const { user, starCount, topLanguages } = JSON.parse(cached) as Cache;
@@ -21,12 +21,11 @@ github.get("/:user?", async(c) => {
     }
 
     const githubToken = env.GITHUB_TOKEN;
-    const userResponse = await fetch(`https://api.github.com/users/${userParam}`, {
-        headers: { Authorization: `Bearer ${githubToken}` },
-    });
-    const reposResponse = await fetch(`https://api.github.com/users/${userParam}/repos`, {
-        headers: { Authorization: `Bearer ${githubToken}` },
-    });
+    const headers = { Authorization: `Bearer ${githubToken}` };
+    const [ userResponse, reposResponse ] = await Promise.all([
+        fetch(`https://api.github.com/users/${userParam}`, { headers }),
+        fetch(`https://api.github.com/users/${userParam}/repos`, { headers }),
+    ]);
 
     if (!userResponse.ok) return c.text("API Response Error: " + userResponse.status, userResponse.status as ContentfulStatusCode);
     if (!reposResponse.ok) return c.text("API Response Error: " + reposResponse.status, reposResponse.status as ContentfulStatusCode);
@@ -44,7 +43,7 @@ github.get("/:user?", async(c) => {
         .slice(0, 3)
         .map(([ lang ]) => lang);
 
-    await cache.set(user.login, JSON.stringify({ user, starCount, topLanguages }), TTL);
+    await cache.set(userParam, JSON.stringify({ user, starCount, topLanguages }), TTL);
 
     return respond(c, format, user, starCount, topLanguages);
 });
