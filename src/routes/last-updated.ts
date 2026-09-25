@@ -1,6 +1,7 @@
 import type { Endpoints } from "@octokit/types";
 import { Hono } from "hono";
 import { namespacedCache } from "../lib/redis.js";
+import { env } from "../lib/env.js";
 
 type Commits = Endpoints["GET /repos/{owner}/{repo}/commits"]["response"]["data"];
 
@@ -15,11 +16,13 @@ lastUpdated.get("/:repo?", async(c) => {
 
     if (cached) return c.json({ lastUpdated: cached });
 
-    const response = await fetch(`https://api.github.com/repos/moritz-grimm/${repo}/commits`);
+    const response = await fetch(`https://api.github.com/repos/moritz-grimm/${repo}/commits`, {
+        headers: { Authorization: `Bearer ${env.GITHUB_TOKEN}` },
+    });
     if (!response.ok) return c.json({ error: `Repository '${repo}' not found` }, 404);
 
     const commits = await response.json() as Commits;
-    const date = commits[0].commit.committer?.date?.split("T")[0] ?? null;
+    const date = commits[0]?.commit.committer?.date?.split("T")[0] ?? null;
 
     if (!date) return c.json({ lastUpdated: "Unknown" });
 
