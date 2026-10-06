@@ -4,7 +4,9 @@
 ![Hono](https://img.shields.io/badge/Hono-E36002.svg?style=for-the-badge&logo=Hono&logoColor=white)
 ![Vitest](https://img.shields.io/badge/Vitest-00FF74.svg?style=for-the-badge&logo=Vitest&logoColor=white)
 
-A personal REST API built with [Hono](https://hono.dev/), providing various endpoints for personal information, GitHub stats, service status, sorting algorithms, and an implementation of the [HTCPCP/1.0](https://datatracker.ietf.org/doc/html/rfc2324) protocol.
+A personal REST API built with [Hono](https://hono.dev/), providing various endpoints for personal information, GitHub stats, service status, sorting algorithms and an implementation of the [HTCPCP/1.0](https://datatracker.ietf.org/doc/html/rfc2324) protocol.
+
+**Live:** [api.moritz-grimm.dev](https://api.moritz-grimm.dev)
 
 ## Setup
 

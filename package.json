@@ -1,15 +1,17 @@
 {
     "name": "personal-api",
+    "private": true,
+    "description": "Public REST API built with Hono and TypeScript",
     "type": "module",
     "scripts": {
-        "dev": "tsx watch src/index.ts",
         "build": "tsc",
+        "dev": "tsx watch src/index.ts",
+        "lint": "bunx eslint",
+        "lint:fix": "bunx eslint --fix",
         "start": "node dist/src/index.js",
         "test": "vitest run",
         "test:coverage": "vitest run --coverage",
-        "test:watch": "vitest",
-        "lint": "bunx eslint",
-        "lint:fix": "bunx eslint --fix"
+        "test:watch": "vitest"
     },
     "dependencies": {
         "@hono/node-server": "^1.19.14",
