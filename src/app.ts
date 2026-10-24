@@ -13,6 +13,7 @@ import lastUpdated from "./routes/last-updated.js";
 import { privacyPolicy } from "./routes/privacy-policy.js";
 import status from "./routes/status/status.js";
 import { env } from "./lib/env.js";
+import health from "./routes/health.js";
 
 const app = new Hono();
 
@@ -30,6 +31,7 @@ app.route("/algorithms", algorithms);
 app.route("/status", status);
 app.route("/", api);
 app.route("/github", github);
+app.route("/health", health);
 app.route("/impressum", impressum);
 app.route("/info", info);
 app.route("/last-updated", lastUpdated);

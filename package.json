@@ -1,5 +1,6 @@
 {
     "name": "personal-api",
+    "version": "1.18.3",
     "private": true,
     "description": "Public REST API built with Hono and TypeScript",
     "type": "module",
